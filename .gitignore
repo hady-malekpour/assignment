@@ -15,6 +15,7 @@ bin
 build
 lib/
 target
+/data
 .springBeans
 interpolated*.xml
 dependency-reduced-pom.xml
