@@ -23,8 +23,8 @@ public class DocumentController {
     }
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<DocumentEntity> search(@RequestParam(value = "search") String text) {
-        return this.documentService.search(text);
+    public List<DocumentEntity> search(@RequestParam(value = "query", required = false) String query) {
+        return this.documentService.search(query);
     }
 
     @RequestMapping(method = RequestMethod.POST)

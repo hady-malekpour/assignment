@@ -3,11 +3,12 @@ package com.edia.service;
 import com.edia.data.DocumentEntity;
 import com.edia.data.elasticsearch.DocumentElasticRepository;
 import com.edia.data.jpa.DocumentJpaRepository;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -24,32 +25,38 @@ public class DefaultDocumentService implements DocumentService {
     @Autowired
     DocumentElasticRepository documentElasticRepository;
 
-    @Autowired
-    private JpaContext jpaContext;
-
     @Override
     public DocumentEntity load(Long id) {
-        DocumentEntity entity = documentJpaRepository.getOne(id);
-        deatach(entity);
-        return entity;
+        Assert.notNull(id);
+        return documentJpaRepository.getOne(id);
     }
 
     @Override
-    public List<DocumentEntity> search(String text) {
-        return null;
+    public List<DocumentEntity> search(String query) {
+        if (StringUtils.hasText(query)) {
+            return documentElasticRepository.findByText("*" + query + "*");
+        }
+        return documentJpaRepository.findAll();
     }
 
     @Override
     public DocumentEntity insert(DocumentEntity entity) {
-        return documentJpaRepository.save(entity);
+        Assert.notNull(entity);
+        Assert.isNull(entity.getId());
+        DocumentEntity updated = documentJpaRepository.save(entity);
+        index(updated);
+        return updated;
     }
 
     @Override
     public DocumentEntity update(DocumentEntity entity) {
-        return documentJpaRepository.save(entity);
+        Assert.notNull(entity);
+        DocumentEntity inserted = documentJpaRepository.save(entity);
+        index(inserted);
+        return inserted;
     }
 
-    private void deatach(DocumentEntity entity) {
-        jpaContext.getEntityManagerByManagedType(DocumentEntity.class).detach(entity);
+    private void index(DocumentEntity updated) {
+        documentElasticRepository.index(updated);
     }
 }

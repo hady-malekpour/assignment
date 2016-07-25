@@ -1,0 +1,19 @@
+<div class="starter-template">
+        <h1>Bootstrap starter template</h1>
+        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+		<table class="table">
+  <tr>
+    <th>Title</th>
+    <th>Text</th>
+    <th>Rank</th>
+  </tr>
+  <% _.each(docs, function(doc) { %>
+  <tr>
+    <td><%= doc.get('title') %></td>
+    <td><%= doc.get('text') %></td>
+    <td><%= doc.get('rank') %></td>
+    <td class="hide"><%= doc.get('id') %></td>
+  </tr>
+  <% }); %>
+</table>
+</div>

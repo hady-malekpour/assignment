@@ -10,7 +10,7 @@ import java.util.List;
 public interface DocumentService {
     DocumentEntity load(Long id);
 
-    List<DocumentEntity> search(String text);
+    List<DocumentEntity> search(String query);
 
     DocumentEntity insert(DocumentEntity entity);
 
