@@ -48,20 +48,20 @@ public class DefaultDocumentService implements DocumentService {
     public DocumentEntity insert(DocumentEntity entity) {
         Assert.notNull(entity);
         Assert.isNull(entity.getId());
-        DocumentEntity updated = documentJpaRepository.save(entity);
-        index(updated);
-        return updated;
-    }
-
-    @Override
-    public DocumentEntity update(DocumentEntity entity) {
-        Assert.notNull(entity);
         DocumentEntity inserted = documentJpaRepository.save(entity);
         index(inserted);
         return inserted;
     }
 
-    private void index(DocumentEntity updated) {
-        jmsTemplate.convertAndSend(DocumentIndexListener.QUEUE, updated);
+    @Override
+    public DocumentEntity update(DocumentEntity entity) {
+        Assert.notNull(entity);
+        DocumentEntity updated = documentJpaRepository.save(entity);
+        index(updated);
+        return updated;
+    }
+
+    private void index(DocumentEntity entity) {
+        jmsTemplate.convertAndSend(DocumentIndexListener.QUEUE, entity);
     }
 }
