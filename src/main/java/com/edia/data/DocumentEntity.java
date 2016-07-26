@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 @Entity
 @Document(indexName = "documents", type = "DocumentEntity", shards = 1, replicas = 0, refreshInterval = "-1")
-public class DocumentEntity implements Serializable{
+public class DocumentEntity implements Serializable {
     private static final long serialVersionUID = 1473894793874893799L;
 
     @Id
@@ -26,6 +26,10 @@ public class DocumentEntity implements Serializable{
 
     @Column(nullable = false)
     private String text;
+
+    @Column(nullable = true)
+    private Integer rank;
+
 
     public DocumentEntity() {
     }
@@ -59,9 +63,27 @@ public class DocumentEntity implements Serializable{
         this.text = text;
     }
 
+    public Integer getRank() {
+        return rank;
+    }
+
+    public void setRank(Integer rank) {
+        this.rank = rank;
+    }
+
     @Override
     public String toString() {
         return String.format("DocumentEntity[id=%s, title='%s', text='%s']", this.id,
                 this.title, this.text);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null && obj instanceof DocumentEntity) {
+            if (this.getId() != null) {
+                return this.getId().equals(((DocumentEntity) obj).getId());
+            }
+        }
+        return super.equals(obj);
     }
 }

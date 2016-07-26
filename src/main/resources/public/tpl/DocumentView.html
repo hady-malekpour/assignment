@@ -1,0 +1,72 @@
+<div class="row">
+
+    <form class="form-horizontal span12">
+
+
+        <fieldset>
+
+            <legend>Document Details</legend>
+            <br/>
+
+            <div class="row">
+                <div class="span9">
+
+                    <div class="control-group">
+                        <label for="documentId" class="control-label">Id:</label>
+
+                        <div class="controls">
+                            <input id="documentId" name="id" type="text" value="<%= id === null ? '' : id %>" class="span1"
+                                   disabled/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="title" class="control-label">Title:</label>
+
+                        <div class="controls">
+                            <input type="text" id="title" name="title" value="<%= title %>"/>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="text" class="control-label">Text:</label>
+
+                        <div class="controls">
+                            <textarea id="text" name="text" class="span6" rows="6"><%= text
+                                %></textarea>
+                            <span class="help-inline"></span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="rank" class="control-label">Rank:</label>
+
+                        <div class="controls">
+                            <input id="rank" name="rank" type="text" value="<%= rank === null ? '' : rank %>" class="span1"
+                                   disabled/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </fieldset>
+
+        <div class="form-actions">
+            <a class="btn btn-primary save">Save</a>
+            <a href="#" class="btn btn-primary document">Documents</a>
+        </div>
+
+    </form>
+
+</div>
+
+<div class="row status-bar">
+    <div class="span12">
+        <div class="alert alert-success" style="display: none">
+            <b>Success!</b> document saved successfully
+        </div>
+    </div>
+</div>
+
+

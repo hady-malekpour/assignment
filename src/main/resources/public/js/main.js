@@ -1,28 +1,38 @@
-require.config({
-    paths: {
-        jquery: 'libs/jquery/jquery',
-        underscore: 'libs/underscore/underscore',
-        backbone: 'libs/backbone/backbone',
-        templates: '../templates',
-        bootstrap: 'bootstrap',
+var AppRouter = Backbone.Router.extend({
+
+    routes: {
+        ""                  : "list",
+        "search/:query"           : "list",
+        "documents/add"         : "addDocument",
+        "documents/:id"         : "documentDetails"
     },
-    shim: {
-        'backbone': {
-            deps: ['underscore', 'jquery'],
-            exports: 'Backbone'
-        },
-        'jquery': {
-            exports: '$'
-        },
-		'bootstrap': {
-            deps: ['jquery'],
-            exports: '$'
-        },
-        'underscore': {
-            exports: '_'
-        },
-    }
+
+    initialize: function () {
+        this.headerView = new HeaderView();
+        $('.header').html(this.headerView.el);
+    },
+
+	list: function(page) {
+        var documentList = new DocumentCollection();
+        documentList.fetch({success: function(){
+            $("#content").html(new DocumentListView({model: documentList}).el);
+        }});
+    },
+
+    documentDetails: function (id) {
+        var document = new DocumentModel({id: id});
+        document.fetch({success: function(){
+            $("#content").html(new DocumentView({model: document}).el);
+        }});
+    },
+
+	addDocument: function() {
+        var document = new DocumentModel();
+        $('#content').html(new DocumentView({model: document}).el);
+	}
 });
-require(['app', ], function(App) {
-    App.initialize();
+
+utils.loadTemplate(['HeaderView', 'DocumentView', 'DocumentListView', 'DocumentSearchView'], function() {
+    app = new AppRouter();
+    Backbone.history.start();
 });

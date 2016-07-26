@@ -2,9 +2,11 @@ package com.edia.service;
 
 import com.edia.data.DocumentEntity;
 import com.edia.data.elasticsearch.DocumentElasticRepository;
+import com.edia.data.jms.DocumentIndexListener;
 import com.edia.data.jpa.DocumentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaContext;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -24,6 +26,9 @@ public class DefaultDocumentService implements DocumentService {
 
     @Autowired
     DocumentElasticRepository documentElasticRepository;
+
+    @Autowired
+    JmsTemplate jmsTemplate;
 
     @Override
     public DocumentEntity load(Long id) {
@@ -57,6 +62,6 @@ public class DefaultDocumentService implements DocumentService {
     }
 
     private void index(DocumentEntity updated) {
-        documentElasticRepository.index(updated);
+        jmsTemplate.convertAndSend(DocumentIndexListener.QUEUE, updated);
     }
 }

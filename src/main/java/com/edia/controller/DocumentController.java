@@ -11,7 +11,7 @@ import java.util.List;
  * Created by hadi on 7/25/2016.
  */
 @RestController
-@RequestMapping("/documents")
+@RequestMapping("/api/documents")
 public class DocumentController {
     @Autowired
     private DocumentService documentService;
@@ -29,11 +29,13 @@ public class DocumentController {
 
     @RequestMapping(method = RequestMethod.POST)
     public DocumentEntity insert(@RequestBody DocumentEntity entity) {
+        entity.setId(null);
         return this.documentService.insert(entity);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    public DocumentEntity update(@RequestBody DocumentEntity entity) {
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
+    public DocumentEntity update(@PathVariable(value = "id") Long id, @RequestBody DocumentEntity entity) {
+        entity.setId(id);
         return this.documentService.update(entity);
     }
 }
